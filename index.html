@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>steam</title>
+	<link rel="stylesheet" href="css/index.css">
+	<script src="jquery.min.js"></script>
+	<script>
+		function a(data){
+			for(var i=0;i<data.length;i++){
+				var li = $("#li").clone(true);
+				$(".game").append(li);
+				li.attr("id","");
+				li.attr("gameId",data[i].gameId)
+				li.find(".name").html(data[i].name)
+				for(var j=0;j<data[i].imgUrl.length;j++){
+					li.find(".tuu").find("img").eq(j).attr("src",data[i].imgUrl[j])
+				}
+				li.find(".zz").find("img").attr("src",data[i].imgUrl[0])
+				if(data[i].isSale){
+					li.find(".discount").html(data[i].discount*100+"%");
+					li.find(".originPrice").html("¥"+data[i].originPrice);
+				}
+				li.find(".price").html("¥" + data[i].price);
+				var kuang3 = li.find(".kuang3");
+				kuang3.find(".name1").html(data[i].name)
+				kuang3.find(".date").find("b").html(data[i].date.replace("-","年").replace("-","月") + "日")
+				kuang3.find(".kou").html("("+data[i].evaluatingCount+"篇测评"+")")
+				kuang3.find(".se").html(data[i].evaluate)
+				if(data[i].evaluate==1){
+					li.find(".se").html("好评如潮");
+					li.find(".se").css({color:"#66c0f4"})
+				}
+				if(data[i].evaluate==2){
+					li.find(".se").html("特别好评");
+					li.find(".se").css({color:"#66c0f4"})
+				}
+				if(data[i].evaluate==3){
+					li.find(".se").html("多半好评");
+					li.find(".se").css({color:"#66c0f4"})
+				}
+				if(data[i].evaluate==4){
+					li.find(".se").html("褒贬不一");
+					li.find(".se").css({color:"#b9a074"})
+				}
+				if(data[i].evaluate==5){
+					li.find(".se").html("多半差评");
+					li.find(".se").css({color:"#a34c25"})
+				}
+				if(data[i].evaluate==6){
+					li.find(".se").html("差评如潮");
+					li.find(".se").css({color:"#a34c25"})
+				}
+				if(data[i].evaluate==7){
+					li.find(".se").html("无评论");
+					li.find(".se").css({color:"#929396"})
+				}
+				for(var v=0;v<data[i].label.length;v++){
+					var a = $("<a></a>");
+					li.find(".biao").append(a);
+					a.html(data[i].label[v])
+				}
+				for(var j = 0; j < data[i].imgUrl.length;j++){
+					var img = $("<img>");
+					img.attr("src",data[i].imgUrl[j])
+					kuang3.find(".xiao").append(img);
+					if(!j){
+						img.css({display:"block"})
+					}
+				}
+			$(".game li").eq(0).fadeIn();
+			}
+			$(".game li").eq(0).fadeIn();
+			
+			$(".tuu img").mouseover(function(){
+				$(this).closest(".yy").siblings(".zz").find("img").attr("src",$(this)[0].src)
+			})
+			$(".tuu img").mouseout(function(){
+				var qq = $(this).closest(".tuu").find("img").eq(0).attr("src");
+				$(this).closest(".yy").siblings(".zz").find("img").attr("src",qq)
+			})
+			// var ww = setInterval(function(){  
+			// 	$(".right").click()
+			// },3000);
+			// $(".game").mouseenter(function(){
+			// 	clearInterval(ww)
+			// });
+			// $(".game").mouseleave(function(){   
+			// 	ww = setInterval(function(){
+			// 		$(".right").click()
+			// 	},3000);
+			// });
+			var aa = 0;
+			for(var k=0;k<$(".lii1").length-1;k++){
+				var span =$("<span></span>");
+				$(".div1").append(span);
+				if(!k){
+					span.addClass("span1")
+				}
+				span.attr("index",k)
+				span.click(function(){					
+					aa = $(this).attr("index");
+					$(".game li").hide().eq(aa).fadeIn();
+					$(this).addClass("span1").siblings().removeClass("span1");
+				})
+				
+			} 
+			function dong(EE){
+				$(".div1 span").removeClass("span1");
+				$(".div1 span").eq(EE).addClass("span1");
+			}
+			$(".lii1").mouseenter(function(){
+				var kuang3 = $(this).find(".kuang3");
+				kuang3.fadeIn("fast");
+				tuu = kuang3.find(".xiao img");
+
+				tuu.hide();
+				tuu.eq(0).show();
+				var index = 0;
+				rr = setInterval(function(){
+					index++;
+					if(index >= tuu.length){
+						index = 0;
+					}
+
+					tuu.hide();
+					tuu.eq(index).fadeIn();
+				},1500)
+
+			}).mouseleave(function(){
+				$(this).find(".kuang3").fadeOut("fast");
+				clearInterval(rr)
+			})
+
+			$(".lii1").click(function(){
+				var gameId = $(this).attr("gameId");
+				if(localStorage.getItem("history")){
+					localStorage.setItem("history",`${localStorage.getItem("history")},${gameId}`)
+				}
+				else{
+					localStorage.setItem("history",gameId)
+				}
+			})
+			//公共轮播图
+			function luen(wrap){
+				var n = 0;
+				var cc = wrap.find(".lii1").length;
+				wrap.find(".right").click(function(){
+					n++;
+					if(n!==cc){
+						wrap.find(".lii1").animate({
+							marginLeft:-(n*940)
+						})
+					}
+					else{
+						n=0;
+						wrap.find(".lii1").animate({
+							marginLeft:-(n*940)
+						})
+					}
+					
+				})
+			}
+			luen($(".lin"))
+		};
+
+		function sa(data){
+			var historyListWrap = $(".ming");
+			for(let li of data){
+				$(`<a href=${li.herf}>${li.name}</a>`).appendTo(historyListWrap);
+			}
+		}
+		window.onload = function(){
+			var qq = document.createElement("script")
+			qq.src = "http://wangdawei.tech:81/recommendGame?callback=a";
+			document.getElementsByTagName("head")[0].appendChild(qq);
+			var historyList = localStorage.getItem("history");
+
+			var qq = document.createElement("script")
+			qq.src = `http://wangdawei.tech:81/history?callback=sa&gameId=${historyList}`;
+			document.getElementsByTagName("head")[0].appendChild(qq);
+			
+			
+		}
+	</script>
+</head>
+<body>
+	<div class="kuang cf">
+		<div class="banxin">
+			<img src="images/1.jpg" alt="" class="img1">
+			<div class="zuo">
+				<a href="#" class="a3">
+					商店
+					<ul>
+						<li><b href="#">精选</b></li>
+						<li><b href="#">探索</b></li>
+						<li><b href="#">鉴赏家</b></li>
+						<li><b href="#">愿望单</b></li>
+						<li><b href="#">新闻</b></li>
+						<li><b href="#">统计</b></li>
+					</ul>
+				</a>
+				<a href="#" class="a4">
+					社区
+					<ul>
+						<li><b href="#">主页</b></li>
+						<li><b href="#">讨论</b></li>
+						<li><b href="#">创意工坊</b></li>
+						<li><b href="#">市场</b></li>
+						<li><b href="#">实况直播</b></li>
+					</ul>
+				</a>
+				<a href="#">关于</a>
+				<a href="#">客服</a>
+			</div>
+			<div class="you">
+				<a href="#" class="a1">安装 steam</a>
+				<a href="#">登录</a>
+				<span>|</span>
+				<a href="#" class="a2">语言</a>
+			</div>
+		</div>
+	</div>
+	<div class="kuang1">
+		<div class="banxin b1">
+			<div class="bei">
+				<div class="zuo">
+					<ul class="dao cf">
+						<li class="li1">
+							<a href="#" class="aa">
+								您的商店
+								<span></span>
+								<ul class="xia">
+									<li><u href="#">商店主页</u></li>
+									<b class="hr"></b>
+									<li><u href="#">最近查看过的</u></li>
+									<li><u href="#">steam 鉴赏家</u></li>
+									<li><u href="#">最近更新</u></li>
+								</ul>
+							</a>
+							
+						</li>
+						<li class="li1">
+							<a href="#" class="aa">
+								游戏
+								<span></span>
+								<ul class="xia xia1" class="xia1">
+									<li><u href="#">免费游玩</u></li>
+									<li><u href="#">抢先体验</u></li>
+									<li><u href="#">试玩</u></li>
+									<li><u href="#">虚拟现实</u></li>
+									<li><u href="#">支持steam控制器</u></li>
+									<li><u href="#">steam上的网吧游戏</u></li>
+									<b class="hr"></b>
+									<h4>按类型浏览</h4>
+									<li><u href="#">休闲</u></li>
+									<li><u href="#">体育</u></li>
+									<li><u href="#">冒险</u></li>
+									<li><u href="#">动作</u></li>
+									<li><u href="#">大型多人在线</u></li>
+									<li><u href="#">模拟</u></li>
+									<li><u href="#">独立</u></li>
+									<li><u href="#">竞速</u></li>
+									<li><u href="#">策略</u></li>
+									<li><u href="#">角色扮演</u></li>
+									<b class="hr"></b>
+									<li><u href="#">查看热门标签</u></li>
+									<b class="hr"></b>
+									<h4>按平台浏览</h4>
+									<li><u href="#">Mac OS X</u></li>
+									<li><u href="#">SteamOS + Linux</u></li>
+								</ul>
+							</a>
+							
+						</li>
+						<li class="li1">
+							<a href="#" class="aa">
+								软件
+								<span></span>
+								<ul class="xia">
+									<li><u href="#">软件中心</u></li>
+									<b class="hr"></b>
+									<li><u href="#">动画制作與建模</u></li>
+									<li><u href="#">实用工具</u></li>
+									<li><u href="#">教育</u></li>
+									<li><u href="#">游戏开发</u></li>
+									<li><u href="#">照片编辑</u></li>
+									<li><u href="#">网络出版</u></li>
+									<li><u href="#">视频制作</u></li>
+									<li><u href="#">设计与插画</u></li>
+									<li><u href="#">音频制作</u></li>
+								</ul>
+							</a>
+						</li>
+						<li class="li1">
+							<a href="#" class="aa">
+								硬件
+								<span></span>
+								<ul class="xia">
+									<li><u href="#">steam 控制器</u></li>
+									<li><u href="#">steam 流式盒</u></li>
+									<li><u href="#">HTV Vive</u></li>
+								</ul>
+							</a>
+						</li>
+						<li class="li1">
+							<a href="#" class="aa">
+								视频
+								<span></span>
+								<ul class="xia">
+									<li><u href="#">视频中心</u></li>
+									<b class="hr"></b>
+									<h4>按类型浏览</h4>
+									<li><u href="#">电影</u></li>
+									<li><u href="#">剧集</u></li>
+									<li><u href="#">纪录片</u></li>
+									<li><u href="#">游戏</u></li>
+									<li><u href="#">教程</u></li>
+									<li><u href="#">短片</u></li>
+									<b class="hr"></b>
+									<h4>按类型浏览</h4>
+									<li><u href="#">动作</u></li>
+									<li><u href="#">日本动画</u></li>
+									<li><u href="#">欢乐</u></li>
+									<li><u href="#">剧情</u></li>
+									<li><u href="#">恐怖</u></li>
+									<li><u href="#">科幻</u></li>
+								</ul>
+							</a>
+						</li>
+						<li class="li1">
+							<a href="#" class="aa">新闻</a>
+						</li>
+					</ul>
+				</div>
+				<div class="you">
+					<input type="text" class="ku" placeholder="搜索商店">
+					<a href="#"></a>
+				</div>
+			</div>
+			<div class="jing">精选和推荐</div>
+			<div class="lin">
+				<div class="yin"> 
+				<ul class="game">
+					<img src="r.png" alt="" class="right">
+					<img src="l.png" alt="" class="left">
+					<div class="div1"></div>
+				</ul>
+				</div>
+				<li id="li" class="lii1">
+					<div class="zz">
+						<img src="" alt="">
+					</div>
+					<div class="yy">
+						<h2 class="name"></h2>
+						<div class="tuu">
+							<img src="" alt="">
+							<img src="" alt="">
+							<img src="" alt="">
+							<img src="" alt="">
+						</div>
+						<h3>现已推出</h3>
+						<div class="div2">
+							<b class="discount"></b>
+							<b class="originPrice"></b>
+							<b class="price"></b>
+						</div>
+						<div class="kuang3">
+							<div class="jian"></div>
+							<h2 class="name1"></h2>
+							<p class="date">
+								<b></b>
+							</p>
+							<div class="xiao"></div>
+							<div class="ping">
+								<i>总体用户测评:</i>
+								<u class="se"></u>
+								<u class="kou"></u>
+							</div>
+							<div class="biao">
+								<div>用户标签:</div>
+							</div>
+						</div>
+					</div>
+				</li>
+			</div>
+			<div class="tebieyouhui cf">
+				<div class="kuan cf">
+					<h2>特别推荐</h2>
+					<span>浏览所有</span>
+				</div>
+				<div class="youhui cf">
+					<ul class="game1">
+						<img src="r.png" alt="" class="right1">
+						<img src="l.png" alt="" class="left1">
+						<div class="div12"></div>
+					</ul>
+					<div class="kv1">
+						<a href="#"><img src="images/9.jpg" alt=""></a>
+						<div class="hui">
+							<h3>周末特惠</h3>
+							<span></span>
+						</div>
+					</div>
+					<div class="kv2">
+						<a href="#"><img src="images/10.jpg" alt=""></a>
+						<div class="hui">
+							<h3>周末免费试玩</h3>
+							<span>周日下午一点(太平洋时间)之前免费玩</span>
+							<div class="div22">
+								<b class="discount"></b>
+								<b class="originPrice"></b>
+								<b class="price"></b>
+							</div>
+						</div>
+					</div>
+					<div class="kv3">
+						<a href="#"><img src="images/11.jpg" alt=""></a>
+						<div class="hui1">
+							<h4>今日特惠!</h4>
+						</div>
+					</div>
+					<div class="kv4">
+						<a href="#"><img src="images/14.jpg" alt=""></a>
+						<div class="hui1">
+							
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="cebian">
+				<a href="#"><img src="images/4.jpg" alt=""></a>
+				<ul>
+					<p>礼物卡</p>
+					<li class="l1"><a href="#">现已在 steam 上推出</a></li>
+					<p>推荐</p>
+					<li><a href="#"><span class="span1"></span>由好友推荐</a></li>
+					<li><a href="#"><span class="span2"></span>由鉴赏家推荐</a></li>
+					<li><a href="#"><span class="span3"></span>
+					标签</a></li>
+					<p>探索队列</p>
+					<li><a href="#"><span class="span4"></span>推荐</a></li>
+					<li><a href="#"><span class="span5"></span>新品</a></li>
+					<p>浏览分类</p>
+					<li><a href="#"><span class="span6"></span>热销商品</a></li>
+					<li><a href="#"><span class="span7"></span>最近更新</a></li>
+					<li><a href="#"><span class="span8"></span>新品</a></li>
+					<li><a href="#"><span class="span9"></span>即将推出</a></li>
+					<li><a href="#"><span class="span10"></span>优惠</a></li>
+					<li><a href="#"><span class="span11"></span>虚拟现实</a></li>
+					<li><a href="#"><span class="span12"></span>支持 steam 控制器</a></li>
+					<p>按类型浏览</p>
+					<li><a href="#">免费游玩</a></li>
+					<li><a href="#">抢先体验</a></li>
+					<li><a href="#">休闲</a></li>
+					<li><a href="#">体育</a></li>
+					<li><a href="#">冒险</a></li>
+					<li><a href="#">动作</a></li>
+					<li><a href="#">大型多人在线</a></li>
+					<li><a href="#">模拟</a></li>
+					<li><a href="#">独立</a></li>
+					<li><a href="#">竞速</a></li>
+					<li><a href="#">策略</a></li>
+					<li><a href="#">角色扮演</a></li>
+					<div class="cook">
+						<p>最近查看</p>
+						<div class="ming"></div>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
